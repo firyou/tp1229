@@ -22,4 +22,6 @@ return array(
     'DB_FIELDS_CACHE'   => false, // 启用字段缓存
     'DB_CHARSET'        => 'utf8', // 数据库编码默认采用utf8
     'SHOW_PAGE_TRACE'   => true,
+    'PAGE_SIZE'         => 20,
+    'PAGE_THEME'        => '%HEADER% %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%',
 );

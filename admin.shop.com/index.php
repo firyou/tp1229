@@ -18,6 +18,9 @@ if(version_compare(PHP_VERSION,'5.3.0','<'))  die('require PHP > 5.3.0 !');
 define('APP_DEBUG',True);
 define('SITE_ROOT',__DIR__);
 define('RUNTIME_PATH',SITE_ROOT . '/Runtime/');
+
+//绑定模块
+define('BIND_MODULE','Admin');
 // 定义应用目录
 define('APP_PATH',SITE_ROOT . '/Application/');
 

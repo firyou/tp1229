@@ -4,7 +4,7 @@
 </block>
 <block name='content'>
     <h1>
-        <span class="action-span"><a href="{:U('add')}">添加供货商</a></span>
+        <span class="action-span"><a href="{:U('add',['nocache'=>NOW_TIME])}">添加供货商</a></span>
         <span class="action-span1"><a href="#">啊咿呀哟 管理中心</a></span>
         <span id="search_id" class="action-span1"> - {$meta_title} </span>
     </h1>
@@ -23,7 +23,6 @@
                     <th>供应商名称</th>
                     <th>供应商描述</th>
                     <th>排序</th>
-                    <th>是否显示</th>
                     <th>操作</th>
                 </tr>
                 <foreach name='rows' item='row'>
@@ -31,10 +30,9 @@
                     <td class="first-cell" align="center">{$row.name}</td>
                     <td align="center">{$row.intro}</td>
                     <td align="center">{$row.sort}</td>
-                    <td align="center"><img src="__IMG__/{$row.status}.gif"/></td>
                     <td align="center">
-                        <a href="#" title="编辑">编辑</a> |
-                        <a href="#" title="编辑">移除</a> 
+                        <a href="{:U('edit',['id'=>$row['id'],'nocache'=>NOW_TIME])}" title="编辑">编辑</a> |
+                        <a href="{:U('delete',['id'=>$row['id'],'nocache'=>NOW_TIME])}" title="移除">移除</a> 
                     </td>
                 </tr>
                 </foreach>

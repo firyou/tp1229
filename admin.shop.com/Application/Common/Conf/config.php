@@ -8,6 +8,8 @@ return array(
         '__CSS__' => BASE_URL . '/Public/css',
         '__JS__'  => BASE_URL . '/Public/js',
         '__IMG__' => BASE_URL . '/Public/images',
+        '__UPLOADIFY__' => BASE_URL . '/Public/ext/uploadify',
+        '__LAYER__' => BASE_URL . '/Public/ext/layer',
     ],
     /* 数据库设置 */
     'DB_TYPE'           => 'mysql', // 数据库类型

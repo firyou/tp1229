@@ -1,4 +1,7 @@
 <extend name='Layout:base'/>
+<block name="css">
+    <css href="__UPLOADIFY__/common.css"/>
+</block>
 <block name='content'>
     <h1>
         <span class="action-span"><a href="{:U('index')}">品牌管理</a></span>
@@ -14,6 +17,14 @@
                     <td>
                         <input type="text" name="name" maxlength="60" value="{$row.name}" />
                         <span class="require-field">*</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label">品牌LOGO</td>
+                    <td>
+                        <input type="hidden" name="logo" value="{$row.logo}" id="logo-data"/>
+                        <input type="file" id="logo"/>
+                        <img src="{$row.logo}" id="logo-preview" style="margin-top: 5px;width:80px;"/>
                     </td>
                 </tr>
                 <tr>
@@ -48,9 +59,33 @@
 </block>
 <block name='js'>
     <js href="__JS__/jquery.min.js"/>
+    <js href="__UPLOADIFY__/jquery.uploadify.min.js"/>
+    <js href="__LAYER__/layer.js"/>
     <script type="text/javascript">
-        $(function(){
+        $(function () {
             $('.status').val([{$row.status|default=1}]);
+            $('#logo').uploadify({
+                swf: '__UPLOADIFY__/uploadify.swf',//上传的flash程序
+                uploader: '{:U("Upload/upload")}',//上传给那个文件处理
+                buttonClass:'kunx',
+                buttonText:' 选择文件 ',//上传按钮的文字提示
+                fileObjName:'logo',//上传文件的控件名称
+                fileSizeLimit:'1024KB',//文件大小
+                fileTypeExts:'*.jpg;*.png;*.gif',//允许上传的文件后缀
+                removeTimeout:1,//上传完成后进度条停留时间
+                onUploadSuccess:function(file,data,response){
+                    data = $.parseJSON(data);
+                    //上传成功
+                    if(data.status){
+                        //把地址放到隐藏域中
+                        $('#logo-data').val(data.file_url);
+                        $('#logo-preview').attr('src',data.file_url);
+                        layer.msg('上传成功',{icon:6,time:1000});
+                    }else{
+                        layer.msg(data.msg,{icon:5,time:1000});
+                    }
+                },
+            });
         });
     </script>
 </block>

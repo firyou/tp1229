@@ -5,11 +5,11 @@ return array(
     //'配置项'=>'配置值'
     'URL_MODEL'         => 2,
     'TMPL_PARSE_STRING' => [
-        '__CSS__' => BASE_URL . '/Public/css',
-        '__JS__'  => BASE_URL . '/Public/js',
-        '__IMG__' => BASE_URL . '/Public/images',
+        '__CSS__'       => BASE_URL . '/Public/css',
+        '__JS__'        => BASE_URL . '/Public/js',
+        '__IMG__'       => BASE_URL . '/Public/images',
         '__UPLOADIFY__' => BASE_URL . '/Public/ext/uploadify',
-        '__LAYER__' => BASE_URL . '/Public/ext/layer',
+        '__LAYER__'     => BASE_URL . '/Public/ext/layer',
     ],
     /* 数据库设置 */
     'DB_TYPE'           => 'mysql', // 数据库类型
@@ -26,5 +26,6 @@ return array(
     'SHOW_PAGE_TRACE'   => true,
     'PAGE_SIZE'         => 20,
     'PAGE_THEME'        => '%HEADER% %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%',
-    'TMPL_CACHE_ON'         =>  false,        // 是否开启模板编译缓存,设为false则每次都会重新编译
+    'TMPL_CACHE_ON'     => false, // 是否开启模板编译缓存,设为false则每次都会重新编译
+    'UPLOAD_SETTING'    => require __DIR__ . '/upload.php',
 );

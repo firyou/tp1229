@@ -10,6 +10,7 @@ return array(
         '__IMG__'       => BASE_URL . '/Public/images',
         '__UPLOADIFY__' => BASE_URL . '/Public/ext/uploadify',
         '__LAYER__'     => BASE_URL . '/Public/ext/layer',
+        '__ZTREE__'     => BASE_URL . '/Public/ext/ztree',
     ],
     /* 数据库设置 */
     'DB_TYPE'           => 'mysql', // 数据库类型

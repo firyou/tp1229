@@ -13,12 +13,12 @@ return [
     'replace'      => false, //存在同名是否覆盖
     'hash'         => true, //是否生成hash编码
     'callback'     => false, //检测文件是否存在回调，如果存在返回文件信息数组
-//    'driver'       => 'Qiniu', // 文件上传驱动
-//    'driverConfig' => array(
-//        'secrectKey' => 'KBYoPnqTbgX4a65rXNI9f-6_kCKwwnHMSnLOGLNk', //sk
-//        'accessKey'  => 'qJHe4wo24q6X6AWSXsv-syl8PkhHjo6i5WXc-to5', //ak
-//        'domain'     => 'o6y7dqmr6.bkt.clouddn.com', //域名
-//        'bucket'     => 'tp1229', //空间名称
-//        'timeout'    => 300, //超时时间
-//    ), // 上传驱动配置
+    'driver'       => 'Qiniu', // 文件上传驱动
+    'driverConfig' => array(
+        'secrectKey' => 'KBYoPnqTbgX4a65rXNI9f-6_kCKwwnHMSnLOGLNk', //sk
+        'accessKey'  => 'qJHe4wo24q6X6AWSXsv-syl8PkhHjo6i5WXc-to5', //ak
+        'domain'     => 'o6y7dqmr6.bkt.clouddn.com', //域名
+        'bucket'     => 'tp1229', //空间名称
+        'timeout'    => 300, //超时时间
+    ), // 上传驱动配置
 ];

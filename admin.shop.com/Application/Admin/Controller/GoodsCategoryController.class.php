@@ -2,7 +2,8 @@
 
 namespace Admin\Controller;
 
-class GoodsCategoryController extends \Think\Controller{
+class GoodsCategoryController extends \Think\Controller {
+
     /**
      * @var \Admin\Model\GoodsCategoryModel 
      */
@@ -21,22 +22,38 @@ class GoodsCategoryController extends \Think\Controller{
         $meta_title   = isset($meta_titles[ACTION_NAME]) ? $meta_titles[ACTION_NAME] : '管理商品分类';
         $this->assign('meta_title', $meta_title);
     }
+
     public function index() {
-        
-    }
-    
-    
-    public function add() {
-        //获取所有的已有分类
-        $this->assign('goods_categories',json_encode($this->_model->getList()));
+        //获取所有的可用的分类
+        $this->assign($this->_model->getPageResult());
         $this->display();
     }
-    
+
+    public function add() {
+        if (IS_POST) {
+            //收集数据
+            if($this->_model->create() === false){
+                $this->error($this->_model->getError());
+            }
+            //添加数据
+            if($this->_model->addCategory() === false){
+                $this->error($this->_model->getError());
+            }
+            //提示跳转
+            $this->success('添加成功',U('index'));
+        } else {
+            //获取所有的已有分类
+            $this->assign('goods_categories', json_encode($this->_model->getList()));
+            $this->display();
+        }
+    }
+
     public function edit($id) {
         
     }
-    
+
     public function delete($id) {
         
     }
+
 }

@@ -97,12 +97,13 @@
             <present name="row">
                 //回显父级分类
                 var parent_node = goods_category_ztree.getNodeByParam('id',{$row.parent_id});
-
-                console.debug(parent_node);
-                goods_category_ztree.selectNode(parent_node);
-                $('#parent_id').val(parent_node.id);
-                $('#parent_name').val(parent_node.name);
+            <else />
+                var parent_node = goods_category_ztree.getNodeByParam('id',0);
             </present>
+            console.debug(parent_node);
+            goods_category_ztree.selectNode(parent_node);
+            $('#parent_id').val(parent_node.id);
+            $('#parent_name').val(parent_node.name);
         });
     </script>
 </block>

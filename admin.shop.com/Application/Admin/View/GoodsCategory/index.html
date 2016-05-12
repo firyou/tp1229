@@ -19,8 +19,8 @@
                         <td align="left" class="first-cell" >{$row.name}</td>
                         <td width="60%" align="center">{$row.intro}</td>
                         <td width="10%" align="center">
-                            <a href="__GROUP__/Category/categoryEdit?cat_id=<{$val.cat_id}>">编辑</a> |
-                            <a href="__GROUP__/Category/categoryDelete?cat_id=<{$val.cat_id}>" title="移除" onclick="">移除</a>
+                            <a href="{:U('edit',['id'=>$row['id']])}">编辑</a> |
+                            <a href="{:U('delete',['id'=>$row['id']])}" title="移除" onclick="">移除</a>
                         </td>
                     </tr>
                 </foreach>

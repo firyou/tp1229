@@ -1,7 +1,7 @@
 <extend name="Layout:base"/>
 <block name="content">
     <h1>
-        <span class="action-span"><a href="__GROUP__/Category/categoryList">商品分类</a></span>
+        <span class="action-span"><a href="{:U('index')}">商品分类</a></span>
         <span class="action-span1"><a href="__GROUP__">啊咿呀哟 管理中心</a></span>
         <span id="search_id" class="action-span1"> - 添加分类 </span>
         <div style="clear:both"></div>
@@ -12,7 +12,7 @@
                 <tr>
                     <td class="label">分类名称:</td>
                     <td>
-                        <input type='text' name='name' maxlength="20" value='' size='27' /> <font color="red">*</font>
+                        <input type='text' name='name' maxlength="20" value='{$row.name}' size='27' /> <font color="red">*</font>
                     </td>
                 </tr>
                 <tr>
@@ -26,24 +26,25 @@
                 <tr>
                     <td class="label">排序:</td>
                     <td>
-                        <input type="text" name='sort' value="50" size="15" />
+                        <input type="text" name='sort' value="{$row.sort|default=50}" size="15" />
                     </td>
                 </tr>
                 <tr>
                     <td class="label">是否显示:</td>
                     <td>
-                        <input type="radio" name="status" value="1"  checked="true"/> 是 
-                        <input type="radio" name="status" value="0"  /> 否
+                        <input type="radio" name="status" value="1" class='status'/> 是 
+                        <input type="radio" name="status" value="0" class='status'/> 否
                     </td>
                 </tr>
                 <tr>
                     <td class="label">简介:</td>
                     <td>
-                        <textarea name="intro" style='width:300px;height:100px'></textarea>
+                        <textarea name="intro" style='width:300px;height:100px'>{$row.intro}</textarea>
                     </td>
                 </tr>
             </table>
             <div class="button-div">
+                <input type="hidden" name="id" value="{$row.id}"/>
                 <input type="submit" value=" 确定 " />
                 <input type="reset" value=" 重置 " />
             </div>
@@ -91,6 +92,17 @@
         $(function () {
             var goods_category_ztree = $.fn.zTree.init($("#goods-categories-tree"), setting, zNodes);
             goods_category_ztree.expandAll(true);
+            //回显状态
+            $('.status').val([{$row.status|default=1}]);
+            <present name="row">
+                //回显父级分类
+                var parent_node = goods_category_ztree.getNodeByParam('id',{$row.parent_id});
+
+                console.debug(parent_node);
+                goods_category_ztree.selectNode(parent_node);
+                $('#parent_id').val(parent_node.id);
+                $('#parent_name').val(parent_node.name);
+            </present>
         });
     </script>
 </block>

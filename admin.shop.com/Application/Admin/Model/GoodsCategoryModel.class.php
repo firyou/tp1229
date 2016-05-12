@@ -40,4 +40,50 @@ class GoodsCategoryModel extends \Think\Model{
             return $cat_id;
         }
     }
+    
+    /**
+     * 修改分类.
+     * @return boolean
+     */
+    public function updateCategory() {
+        //先判断是否更改了父级分类:先获取数据表中原有的还有当前提交的
+        $parent_id = $this->getFieldById($this->data['id'],'parent_id');
+        //由于nestedsets在不修改层级的时候会导致执行结果为false,所以需要先判断一下是否需要移动层级
+        if($parent_id != $this->data['parent_id'] ){
+            //实例化nestedsets所需的orm对象
+            $orm = D('NestedSetsMysql','Logic');
+            //创建一个nestedsets对象
+            $nestedsets = new \Admin\Service\NestedSets($orm, $this->trueTableName, 'lft', 'rght', 'parent_id', 'id', 'level');
+            if($nestedsets->moveUnder($this->data['id'], $this->data['parent_id'], 'bottom') === false){
+                $this->error = '父级分类不正确';
+                return false;
+            }
+        }
+        return $this->save();
+    }
+    
+    /**
+     * 使用物理删除方式删除商品分类,会同时删除后代分类.
+     * @param integer $id 当前分类id.
+     * @return type
+     */
+    public function deleteCategory($id){
+        //逻辑删除
+        //1.获取当前分类的左右边界
+//        $info = $this->where(['id'=>$id])->field('lft,rght')->find();
+//        $cond = [
+//            'lft'=>['egt',$info['lft']],
+//            'rght'=>['elt',$info['rght']],
+//        ];
+//        $this->where($cond)->save(['status'=>0]);
+//        var_dump($cond);
+//        return;
+        
+        //物理删除.
+        //实例化nestedsets所需的orm对象
+        $orm = D('NestedSetsMysql','Logic');
+        //创建一个nestedsets对象
+        $nestedsets = new \Admin\Service\NestedSets($orm, $this->trueTableName, 'lft', 'rght', 'parent_id', 'id', 'level');
+        return $nestedsets->delete($id);
+    }
 }

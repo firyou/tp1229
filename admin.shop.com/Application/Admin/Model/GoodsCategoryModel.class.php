@@ -28,9 +28,11 @@ class GoodsCategoryModel extends \Think\Model{
     
     public function addCategory(){
         //实例化一个nestedsets所需要的数据库操作类的对象
-        $orm = new \Admin\Model\NestedSetsMysql();
+//        $orm = new \Admin\Model\NestedSetsMysql();
+        //使用D函数创建对象,第一个实参是模型类名,第二个是模型层标示(也就是模型文件夹),注意,模型文件根据规范都应当以层的标识为结束字符串
+        $orm = D('NestedSetsMysql','Logic');
         //创建一个nestedsets对象
-        $nestedsets = new \Admin\Model\NestedSets($orm, $this->trueTableName, 'lft', 'rght', 'parent_id', 'id', 'level');
+        $nestedsets = new \Admin\Service\NestedSets($orm, $this->trueTableName, 'lft', 'rght', 'parent_id', 'id', 'level');
         if(($cat_id = $nestedsets->insert($this->data['parent_id'], $this->data, 'bottom'))===false){
             $this->error = M()->getError();
             return false;

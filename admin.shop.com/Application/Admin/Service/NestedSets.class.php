@@ -9,7 +9,7 @@
  * @namespace MediaCore\Lib\NestedSets
  * @copyright Copyright (c), 2012
  */
-namespace Admin\Model;
+namespace Admin\Service;
 
 /**
  * @package MediaCore
@@ -84,7 +84,7 @@ class NestedSets {
 	 *
 	 * @return void
 	 */
-	public function __construct(\Admin\Model\DbMysql $Db, $table_name, $left_key = null, $right_key = null, $parent_key = null, $primary_key = null, $level_key = null) {
+	public function __construct(\Admin\Logic\DbMysql $Db, $table_name, $left_key = null, $right_key = null, $parent_key = null, $primary_key = null, $level_key = null) {
 		$this->Db = $Db;
 		$this->tableName = $table_name;
 		if ($left_key !== null) { $this->leftKey = $left_key; }

@@ -9,7 +9,7 @@
  * @namespace MediaCore\Lib\Db\connectors
  * @copyright Copyright (c), 2012
  */
-namespace Admin\Model;
+namespace Admin\Logic;
 
 interface  DbMysql {
 	/**

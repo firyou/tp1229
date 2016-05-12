@@ -6,14 +6,14 @@
  * and open the template in the editor.
  */
 
-namespace Admin\Model;
+namespace Admin\Logic;
 
 /**
  * Description of NestedSetsMysql
  *
  * @author qingf
  */
-class NestedSetsMysql implements DbMysql{
+class NestedSetsMysqlLogic implements DbMysql{
     
     public function connect() {
         echo __METHOD__ .'<br />';

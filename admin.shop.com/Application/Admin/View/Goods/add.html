@@ -152,20 +152,12 @@
                         <td class="label">商品相册：</td>
                         <td>
                             <div class="myupload-img-box">
-                                <div class="myupload-pre-item">
-                                    <img src="__IMG__/goods1.jpg"/>
-                                    <a href="#">×</a>
-                                </div>
-
-                                <div class="myupload-pre-item">
-                                    <img src="__IMG__/goods2.jpg"/>
-                                    <a href="#">×</a>
-                                </div>
-
-                                <div class="myupload-pre-item">
-                                    <img src="__IMG__/goods3.jpg"/>
-                                    <a href="#">×</a>
-                                </div>
+                                <foreach name='row.paths' item='path'>
+                                    <div class="myupload-pre-item">
+                                        <img src="{$path}"/>
+                                        <a href="#">×</a>
+                                    </div>
+                                </foreach>
                             </div>
 
                             <div>

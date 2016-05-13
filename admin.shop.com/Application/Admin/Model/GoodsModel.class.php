@@ -49,30 +49,84 @@ class GoodsModel extends \Think\Model {
     /**
      * 1.保存商品基本信息
      * 2.保存商品详细描述
-     * 3.TODO相册
+     * 3.相册
      */
     public function addGoods() {
         unset($this->data[$this->getPk()]);
         $this->startTrans();
         //添加商品的基本信息
-        if (($goods_id = $this->add()) === false) {
+        if (($goods_id = $this->_saveGoodsInfo()) === false) {
             $this->rollback();
             return false;
         }
+
         //保存商品详细描述
-        $content_model = M('GoodsIntro');
-        $data          = [
-            'goods_id' => $goods_id,
-            'content'  => I('post.content', '', false),
-        ];
-        if ($content_model->add($data) === false) {
-            $this->error = $content_model->getError();
+        if ($this->_saveGoodsIntro($goods_id) === false) {
             $this->rollback();
             return false;
         }
 
         //保存商品相册
-        $gallery_model = M('Gallery');
+        if ($this->_saveGoodsGallery($goods_id) === false) {
+            $this->rollback();
+            return false;
+        }
+
+        $this->commit();
+        return true;
+    }
+
+    /**
+     * 保存基本信息.
+     * 可以执行添加可以执行修改
+     * @param boolean $is_new 是否是新增商品.如果是true调用add否则save
+     * @return boolean
+     */
+    private function _saveGoodsInfo($is_new = true) {
+        if ($is_new) {
+            if (($goods_id = $this->add()) === false) {
+                return false;
+            }
+        } else {
+            if (($goods_id = $this->save()) === false) {
+                return false;
+            }
+        }
+        return $goods_id;
+    }
+
+    /**
+     * 保存商品详细描述.
+     * @param integer $goods_id 商品id
+     * @return boolean
+     */
+    private function _saveGoodsIntro($goods_id, $is_new = true) {
+        $content_model = M('GoodsIntro');
+        $data          = [
+            'goods_id' => $goods_id,
+            'content'  => I('post.content', '', false),
+        ];
+        if ($is_new) {
+            if ($content_model->add($data) === false) {
+                $this->error = $content_model->getError();
+                return false;
+            }
+        } else {
+            if ($content_model->save($data) === false) {
+                $this->error = $content_model->getError();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 保存相册.
+     * @param integer $goods_id 商品id.
+     * @return boolean
+     */
+    private function _saveGoodsGallery($goods_id) {
+        $gallery_model = M('GoodsGallery');
         $paths         = I('post.path');
         $data          = [];
         foreach ($paths as $path) {
@@ -81,12 +135,10 @@ class GoodsModel extends \Think\Model {
                 'path'     => $path,
             ];
         }
-        if($data && $gallery_model->addAll($data) === false){
+        if ($data && $gallery_model->addAll($data) === false) {
             $this->error = $gallery_model->getError();
-            $this->rollback();
             return false;
         }
-        $this->commit();
         return true;
     }
 
@@ -121,7 +173,9 @@ class GoodsModel extends \Think\Model {
      */
     public function getGoodsInfo($id) {
         //1.获取基本信息
-        $row = $this->alias('g')->join('__GOODS_INTRO__ AS gi ON gi.goods_id=g.id')->find($id);
+        $row           = $this->alias('g')->join('__GOODS_INTRO__ AS gi ON gi.goods_id=g.id')->find($id);
+        $gallery_model = M('GoodsGallery');
+        $row['paths']  = $gallery_model->where(['goods_id' => $id])->getField('path', true);
         return $row;
     }
 
@@ -133,24 +187,22 @@ class GoodsModel extends \Think\Model {
         $this->startTrans();
         $request_data = $this->data;
         //1.保存基本信息
-        if ($this->save() === false) {
+        if ($this->_saveGoodsInfo(false) === false) {
             $this->rollback();
             return false;
         }
         //2.保存详细描述
-        $data          = [
-            'goods_id' => $request_data['id'],
-            'content'  => I('post.content', '', false),
-        ];
-        $content_model = M('GoodsIntro');
-        if ($content_model->save($data) === false) {
-            $this->error = $content_model->getError();
+        if ($this->_saveGoodsIntro($request_data['id'],false) === false) {
+            $this->rollback();
+            return false;
+        }
+        //3.保存相册信息
+        if ($this->_saveGoodsGallery($request_data['id']) === false) {
             $this->rollback();
             return false;
         }
         $this->commit();
         return true;
-        //3.TODO:保存相册信息
     }
 
 }

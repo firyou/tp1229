@@ -35,5 +35,12 @@ class BrandModel extends \Think\Model {
         //返回分页代码和结果集
         return ['page_html'=>$page_html,'rows'=>$rows];
     }
+    
+    /**
+     * 获取分类列表
+     */
+    public function getList(){
+        return $this->where(['status'=>1])->select();
+    }
 
 }

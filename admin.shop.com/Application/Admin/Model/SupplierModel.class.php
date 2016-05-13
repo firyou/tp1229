@@ -40,5 +40,12 @@ class SupplierModel extends \Think\Model {
         unset($this->data[$this->pk]);
         return $this->add();
     }
+    
+    /**
+     * 获取分类列表
+     */
+    public function getList(){
+        return $this->where(['status'=>1])->select();
+    }
 
 }

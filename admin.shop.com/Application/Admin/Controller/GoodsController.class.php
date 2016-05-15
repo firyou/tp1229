@@ -28,7 +28,39 @@ class GoodsController extends \Think\Controller {
      * TODO:搜索
      */
     public function index() {
-        $this->assign($this->_model->getPageResult());
+        //组织查询条件
+        $cond              = [];
+        $goods_category_id = I('get.goods_category_id');
+        if ($goods_category_id) {
+            $cond['goods_category_id'] = $goods_category_id;
+        }
+        $brand_id = I('get.brand_id');
+        if ($brand_id) {
+            $cond['brand_id'] = $brand_id;
+        }
+        $is_on_sale = I('get.is_on_sale');
+        if (strlen($is_on_sale)) {
+            $cond['is_on_sale'] = $is_on_sale;
+        }
+        $keyword = I('get.keyword');
+        if ($keyword) {
+            $cond['name'] = ['like', '%' . $keyword . '%'];//coreseek  sphinx(斯芬克斯)
+        }
+        //商品推荐状态的搜索
+        //促销 goods_status&4
+        $goods_status = I('get.goods_status');
+        if($goods_status){
+            $cond[] = 'goods_status & ' .$goods_status;
+        }
+
+        $this->assign($this->_model->getPageResult($cond));
+        //获取所有分类
+        //加载商品分类列表
+        $this->assign('goods_categories', D('GoodsCategory')->getList());
+        //加载商品品牌列表
+        $this->assign('brands', D('Brand')->getList());
+        $this->assign('goods_statuses', $this->_model->goods_statuses);
+        $this->assign('is_on_sales', $this->_model->is_on_sales);
         $this->display();
     }
 
@@ -76,9 +108,9 @@ class GoodsController extends \Think\Controller {
      * @param integer $id
      */
     public function delete($id) {
-        if($this->_model->setField(['id'=>$id,'status'=>0])===false){
+        if ($this->_model->setField(['id' => $id, 'status' => 0]) === false) {
             $this->error($this->_model->getError());
-        }else{
+        } else {
             $this->success('删除成功', U('index'));
         }
     }

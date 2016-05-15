@@ -3,6 +3,25 @@
 namespace Admin\Model;
 
 class GoodsModel extends \Think\Model {
+    
+    /**
+     * 商品促销状态
+     * @var type 
+     */
+    public $goods_statuses = [
+        1=>'精品',
+        2=>'新品',
+        4=>'热销',
+    ];
+    
+    /**
+     * 商品售卖状态.
+     * @var type 
+     */
+    public $is_on_sales = [
+        1=>'上架',
+        0=>'下架',
+    ];
 
     protected $_validate = [
         ['name', 'require', '商品名不能为空', self::EXISTS_VALIDATE, '', self::MODEL_BOTH],
@@ -175,7 +194,7 @@ class GoodsModel extends \Think\Model {
         //1.获取基本信息
         $row           = $this->alias('g')->join('__GOODS_INTRO__ AS gi ON gi.goods_id=g.id')->find($id);
         $gallery_model = M('GoodsGallery');
-        $row['paths']  = $gallery_model->where(['goods_id' => $id])->getField('path', true);
+        $row['paths']  = $gallery_model->where(['goods_id' => $id])->getField('id,path', true);
         return $row;
     }
 

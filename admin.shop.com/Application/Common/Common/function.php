@@ -22,3 +22,26 @@ function arr2select(array $data, $value_field, $name_field, $name, $selected_val
     $html .= '</select>';
     return $html;
 }
+
+/**
+ * [
+ *  4=>'热销'
+ * ]
+ * @param array $data
+ * @param type $selected_value
+ * @return string
+ */
+function onearr2select(array $data,$name,$selected_value=''){
+    $html = '<select name="' . $name . '">';
+    $html .= '<option value="">请选择</option>';
+    foreach ($data as $key=>$value) {
+        $key = (string)$key;
+        if ($selected_value === $key) {
+            $html .= '<option value="' . $key . '" selected="selected">' . $value . '</option>';
+        } else {
+            $html .= '<option value="' . $key . '">' . $value . '</option>';
+        }
+    }
+    $html .= '</select>';
+    return $html;
+}

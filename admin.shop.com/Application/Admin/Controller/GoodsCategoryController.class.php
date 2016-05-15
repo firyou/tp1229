@@ -28,7 +28,7 @@ class GoodsCategoryController extends \Think\Controller {
      */
     public function index() {
         //获取所有的可用的分类
-        $this->assign($this->_model->getPageResult());
+        $this->assign('rows',$this->_model->getList());
         $this->display();
     }
 

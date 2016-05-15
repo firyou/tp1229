@@ -52,9 +52,23 @@ class NestedSetsMysqlLogic implements DbMysql{
     }
 
     public function getOne($sql, array $args = array()) {
-        echo __METHOD__ .'<br />';
-        dump(func_get_args());
-        echo '<hr />';
+        //获取实参列表
+        $params = func_get_args();
+        //获取sql语句结构
+        $sql = array_shift($params);
+        //将占位符拆分成数组
+        $sqls = preg_split('/\?[NTF]/', $sql);
+        //删除最后一个空字符串元素
+        array_pop($sqls);
+        $sql = '';
+        //拼凑sql语句
+        foreach($sqls as $key=>$value){
+            $sql .= $value . $params[$key];
+        }
+        //执行查询操作
+        $rows = M()->query($sql);
+        //返回第一行结果
+        return array_shift($rows);
     }
 
     /**

@@ -155,7 +155,7 @@
                                 <foreach name='row.paths' item='path'>
                                     <div class="myupload-pre-item">
                                         <img src="{$path}"/>
-                                        <a href="#">×</a>
+                                        <a href="#" data="{$key}" class="del-img">×</a>
                                     </div>
                                 </foreach>
                             </div>
@@ -217,6 +217,31 @@
         up_logo();
         //上传相册
         up_gallery();
+        
+        //绑定js事件在×按钮上
+        $('.myupload-img-box').on('click','.del-img',function(){
+            //1.如果是数据表中已有的,执行ajax
+            var gallery_id = $(this).attr('data');
+            var flag = true;
+            var msg = '删除成功';
+            if(gallery_id){
+                var url = '{:U("Gallery/delete")}';
+                var data = {id:gallery_id};
+                $.getJSON(url,data,function(response){
+                    //判断是否删除成功
+                    flag  = response.status;
+                    msg = response.info;
+                    console.debug(response)
+                });
+            }
+            //删除节点
+            if(flag){
+                $(this).parent().remove();
+                layer.msg(msg);
+            }
+            //2.如果是刚上传的直接移除div节点即可
+            return false;
+        });
     });
     
     //将商品分类使用ztree展示
@@ -294,7 +319,7 @@
                             var html = '<div class="myupload-pre-item">';
                             html += '<input type="hidden" name="path[]" value="' + data.file_url + '"/>';
                             html += '<img src="'+data.file_url+'"/>';
-                            html += '<a href="#">×</a>';
+                            html += '<a href="#" class="del-img">×</a>';
                             html += '</div>';
                             $(html).appendTo($('.myupload-img-box'));
                             layer.msg('上传成功',{icon:6,time:1000});

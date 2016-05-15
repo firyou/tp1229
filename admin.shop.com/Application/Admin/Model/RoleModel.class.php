@@ -8,7 +8,7 @@ class RoleModel extends \Think\Model{
      */
     
     /**
-     * 获取分类列表
+     * 获取角色列表
      */
     public function getList(){
         return $this->where(['status'=>1])->select();
@@ -23,16 +23,7 @@ class RoleModel extends \Think\Model{
             return false;
         }
         //保存关联关系
-        $permission_ids = I('post.permission_id');
-        $data = [];
-        foreach($permission_ids as $permission_id){
-            $data[] = [
-                'role_id'=>$role_id,
-                'permission_id'=>$permission_id,
-            ];
-        }
-        if(M('RolePermission')->addAll($data)===false){
-            $this->error = '保存权限失败';
+        if($this->_save_permission($role_id)===false){
             $this->rollback();
             return false;
         }
@@ -41,7 +32,7 @@ class RoleModel extends \Think\Model{
     }
     
     /**
-     * 修改分类.
+     * 修改角色.
      * @return boolean
      */
     public function updateRole() {
@@ -53,19 +44,7 @@ class RoleModel extends \Think\Model{
             return false;
         }
         //保存关联关系
-        //删除原来的关联关系
-        $role_permission_model = M('RolePermission');
-        $role_permission_model->where(['role_id'=>$request_data['id']])->delete();
-        $permission_ids = I('post.permission_id');
-        $data = [];
-        foreach($permission_ids as $permission_id){
-            $data[] = [
-                'role_id'=>$role_id,
-                'permission_id'=>$permission_id,
-            ];
-        }
-        if(M('RolePermission')->addAll($data)===false){
-            $this->error = '保存权限失败';
+        if($this->_save_permission($request_data['id'],false) === false){
             $this->rollback();
             return false;
         }
@@ -74,11 +53,60 @@ class RoleModel extends \Think\Model{
     }
     
     /**
-     * 使用物理删除方式删除商品分类,会同时删除后代分类.
-     * @param integer $id 当前分类id.
+     * 保存角色和权限的关联关系.
+     * @param integer $role_id 角色id.
+     * @param boolean $is_new 是新增角色还是编辑角色.
+     * @return boolean
+     */
+    private function _save_permission($role_id,$is_new=true){
+        $role_permission_model = M('RolePermission');
+        //如果是修改,就先删除原来的
+        if(!$is_new){
+            if($role_permission_model->where(['role_id'=>$role_id])->delete()===false){
+                $this->error = '删除原权限失败';
+                return false;
+            }
+        }
+        //收集用户提交的权限列表
+        $permission_ids = I('post.permission_id');
+        if(empty($permission_ids)){
+            return true;
+        }
+        $data = [];
+        //准备可以一次插入多条记录的数据结构
+        foreach($permission_ids as $permission_id){
+            $data[] = [
+                'role_id'=>$role_id,
+                'permission_id'=>$permission_id,
+            ];
+        }
+        if($role_permission_model->addAll($data)===false){
+            $this->error = '保存权限失败';
+            return false;
+        }
+        return true;
+    }
+    /**
+     * 物理方式删除角色.
+     * @param integer $id 当前角色id.
      * @return type
      */
     public function deleteRole($id){
+        $this->startTrans();
+        //删除角色表记录
+        if($this->delete($id) === false){
+            $this->rollback();
+            return false;
+        }
+        //删除中间表记录
+        $role_permission_model = M('RolePermission');
+        if($role_permission_model->where(['role_id'=>$id])->delete() === false){
+            $this->error = '删除权限失败';
+            $this->rollback();
+            return false;
+        }
+        $this->commit();
+        return true;
     }
     
     /**

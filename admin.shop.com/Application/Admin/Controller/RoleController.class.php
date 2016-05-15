@@ -34,16 +34,16 @@ class RoleController extends \Think\Controller{
     }
     
     /**
-     * 分类列表.
+     * 角色列表.
      */
     public function index() {
-        //获取所有的可用的分类
+        //获取所有的可用的角色
         $this->assign('rows',$this->_model->getList());
         $this->display();
     }
 
     /**
-     * 添加分类
+     * 添加角色
      */
     public function add() {
         if (IS_POST) {
@@ -64,7 +64,7 @@ class RoleController extends \Think\Controller{
     }
 
     /**
-     * 修改分类.
+     * 修改角色.
      * @param integer $id
      */
     public function edit($id) {
@@ -83,7 +83,7 @@ class RoleController extends \Think\Controller{
         } else {//回显
             //获取到当前记录
             $row = $this->_model->getRoleInfo($id);
-            //获取所有的分类
+            //获取所有的角色
             $this->_before_view();
             //分配数据.
             $this->assign('row', $row);
@@ -93,11 +93,15 @@ class RoleController extends \Think\Controller{
     }
 
     /**
-     * 物理删除商品分类.
+     * 物理删除角色.
      * @param type $id
      */
     public function delete($id) {
-        $this->_model->deleteRole($id);
+        if($this->_model->deleteRole($id)===false){
+            $this->error($this->_model->getError());
+        }else{
+            $this->success('删除成功', U('index'));
+        }
     }
 
     /**

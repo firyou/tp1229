@@ -26,20 +26,13 @@
                     <td>
                         <input type="hidden" name='parent_id' id="parent_id" value=""/>
                         <input type="text" id="parent_name" value="请选择" disabled="disabled" style="padding-left:5px;"/>
-                        <ul id='goods-categories-tree' class='ztree' style='height:auto;'></ul>
+                        <ul id='permission_tree' class='ztree' style='height:auto;'></ul>
                     </td>
                 </tr>
                 <tr>
                     <td class="label">排序:</td>
                     <td>
                         <input type="text" name='sort' value="{$row.sort|default=50}" size="15" />
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label">是否显示:</td>
-                    <td>
-                        <input type="radio" name="status" value="1" class='status'/> 是 
-                        <input type="radio" name="status" value="0" class='status'/> 否
                     </td>
                 </tr>
                 <tr>
@@ -96,18 +89,16 @@
 
         var zNodes = {$permissions};
         $(function () {
-            var goods_category_ztree = $.fn.zTree.init($("#goods-categories-tree"), setting, zNodes);
-            goods_category_ztree.expandAll(true);
-            //回显状态
-            $('.status').val([{$row.status|default=1}]);
+            var permission_ztree = $.fn.zTree.init($("#permission_tree"), setting, zNodes);
+            permission_ztree.expandAll(true);
             <present name="row">
                 //回显父级权限
-                var parent_node = goods_category_ztree.getNodeByParam('id',{$row.parent_id});
+                var parent_node = permission_ztree.getNodeByParam('id',{$row.parent_id});
             <else />
-                var parent_node = goods_category_ztree.getNodeByParam('id',0);
+                var parent_node = permission_ztree.getNodeByParam('id',0);
             </present>
             console.debug(parent_node);
-            goods_category_ztree.selectNode(parent_node);
+            permission_ztree.selectNode(parent_node);
             $('#parent_id').val(parent_node.id);
             $('#parent_name').val(parent_node.name);
         });

@@ -45,3 +45,13 @@ function onearr2select(array $data,$name,$selected_value=''){
     $html .= '</select>';
     return $html;
 }
+
+/**
+ * 加盐加密
+ * @param string $password 原始密码
+ * @param string $salt     盐
+ * @return string
+ */
+function salt_mcrypt($password,$salt){
+    return md5(md5($password) . $salt);
+}

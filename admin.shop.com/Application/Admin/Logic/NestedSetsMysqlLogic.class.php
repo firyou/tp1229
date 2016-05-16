@@ -68,7 +68,7 @@ class NestedSetsMysqlLogic implements DbMysql{
         //执行查询操作
         $rows = M()->query($sql);
         //返回第一行结果
-        return array_shift($rows);
+        return array_shift(array_shift($rows));
     }
 
     /**

@@ -86,6 +86,7 @@ class RoleModel extends \Think\Model{
         }
         return true;
     }
+    
     /**
      * 物理方式删除角色.
      * @param integer $id 当前角色id.
@@ -98,10 +99,18 @@ class RoleModel extends \Think\Model{
             $this->rollback();
             return false;
         }
+        
         //删除中间表记录
         $role_permission_model = M('RolePermission');
         if($role_permission_model->where(['role_id'=>$id])->delete() === false){
             $this->error = '删除权限失败';
+            $this->rollback();
+            return false;
+        }
+        
+        //删除管理员关联关系
+        if(M('AdminRole')->where(['role_id'=>$id])->delete() === false){
+            $this->error = '删除管理员关联失败';
             $this->rollback();
             return false;
         }

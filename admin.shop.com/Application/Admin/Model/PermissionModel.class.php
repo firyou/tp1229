@@ -70,12 +70,38 @@ class PermissionModel extends \Think\Model {
      * @return boolean
      */
     public function deletePermission($id) {
+        $this->startTrans();
         $orm        = D('NestedSetsMysql', 'Logic');
         $nesetdsets = new \Admin\Service\NestedSets($orm, $this->trueTableName, 'lft', 'rght', 'parent_id', 'id', 'level');
+        
+        //获取后代权限
+        //获取当前权限的信息
+        $info = $this->field('lft,rght')->find($id);
+        $cond = [
+            'lft'=>['egt',$info['lft']],
+            'rght'=>['elt',$info['rght']],
+        ];
+        $permission_ids = $this->where($cond)->getField('id',true);
+        
+        //删除对应的角色
+        if(M('RolePermission')->where(['permission_id'=>['in',$permission_ids]])->delete() === false){
+            $this->error = '删除角色关联失败';
+            $this->rollback();
+            return false;
+        }
+        //删除对应的管理员
+        if(M('AdminPermission')->where(['permission_id'=>['in',$permission_ids]])->delete() === false){
+            $this->error = '删除管理员关联失败';
+            $this->rollback();
+            return false;
+        }
+        
         if ($nesetdsets->delete($id) === false) {
             $this->error = '删除失败';
+            $this->rollback();
             return false;
         } else {
+            $this->commit();
             return true;
         }
     }

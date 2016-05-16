@@ -182,7 +182,15 @@ class AdminModel extends \Think\Model{
             $this->rollback();
             return false;
         }
+        //删除角色关联关系
         if(M('AdminRole')->where(['admin_id'=>$id])->delete() === false){
+            $this->error = '删除角色失败';
+            $this->rollback();
+            return false;
+        }
+        
+        //删除权限关联关系
+        if(M('AdminPermission')->where(['admin_id'=>$id])->delete() === false){
             $this->error = '删除角色失败';
             $this->rollback();
             return false;

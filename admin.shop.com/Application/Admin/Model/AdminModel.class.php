@@ -237,10 +237,25 @@ class AdminModel extends \Think\Model{
             ];
             $this->setField($data);
             session('ADMIN_INFO',$userinfo);
+            //获取用户的可以访问的path列表
             return true;
         }else{
             $this->error = '密码不正确';
             return false;
         }
+    }
+    
+    private function _save_permission($admin_id){
+        //获取管理员所能够看到的请求url
+        $sql = 'SELECT DISTINCT path FROM (SELECT  permission_id  FROM admin_role AS ar  LEFT JOIN role_permission AS rp  ON ar.`role_id` = rp.`role_id`  WHERE ar.`admin_id` = '.$admin_id.'  UNION SELECT permission_id  FROM admin_permission AS ap  WHERE ap.`admin_id` = '.$admin_id.') AS t  LEFT JOIN permission AS p  ON t.permission_id = p.`id` WHERE p.`path` <> "" ';
+        $permissions_info = M()->query($sql);
+        $paths = [];
+        //将path地址形成一位数组
+        if($permissions_info) {
+            foreach ($permissions_info as $permission_info){
+                $paths[] = $permission_info['path'];
+            }
+        }
+        session('PATHS',$paths);
     }
 }

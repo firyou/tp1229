@@ -7,4 +7,11 @@ return array(
         'Admin/Admin/login',
         'Admin/Captcha/captcha',
     ],
+    //登陆用户都可见页面地址
+    'LOGIN_IGNORE'=>[
+        'Admin/Index/index',
+        'Admin/Index/top',
+        'Admin/Index/menu',
+        'Admin/Index/main',
+    ],
 );

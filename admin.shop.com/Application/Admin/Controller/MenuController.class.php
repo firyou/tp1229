@@ -97,7 +97,10 @@ class MenuController extends \Think\Controller{
      * @param type $id
      */
     public function delete($id) {
-        $this->_model->deleteCategory($id);
+        if($this->_model->deleteMenu($id)===false){
+            $this->error($this->_model->getError());
+        }
+        $this->success('删除成功',U('index'));
     }
 
     /**

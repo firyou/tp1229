@@ -21,12 +21,26 @@ class AdminModel extends \Think\Model{
         ['repassword','password','两次密码不一致',self::EXISTS_VALIDATE,'confirm',self::MODEL_INSERT],
         ['email','email','邮箱格式不合法',self::EXISTS_VALIDATE,'',self::MODEL_INSERT],
         ['repassword','password','两次密码不一致',self::EXISTS_VALIDATE,'confirm',self::MODEL_UPDATE],
+        
+//        ['captcha','check_captcha','验证码不匹配',self::EXISTS_VALIDATE,'callback','login'],
+        ['username','require','账号不能为空',self::EXISTS_VALIDATE,'','login'],
+        ['password','require','密码不能为空',self::EXISTS_VALIDATE,'','login'],
     ];
     
     protected $_auto = [
         ['salt','\Org\Util\String::randString',self::MODEL_BOTH,'function',6],
         ['add_time',NOW_TIME,self::MODEL_INSERT],
     ];
+    
+    /**
+     * 自动验证验证码.
+     * @param type $code
+     * @return type
+     */
+    protected function check_captcha($code) {
+        $verify = new \Think\Verify();
+        return $verify->check($code);
+    }
     
     /**
      * 1.新增管理员得到管理员id
@@ -197,5 +211,36 @@ class AdminModel extends \Think\Model{
         }
         $this->commit();
         return true ;
+    }
+    
+    /**
+     * 验证账号密码.
+     * 1.获取用户信息
+     * 2.进行提交密码加盐和数据库密码比较
+     * 3.返回
+     */
+    public function login() {
+        $request_data = $this->data;
+        $userinfo = $this->getByUsername($this->data['username']);
+        if(empty($userinfo)){
+            $this->error = '用户不存在';
+            return false;
+        }
+        $password = salt_mcrypt($request_data['password'], $userinfo['salt']);
+        
+        if($password == $userinfo['password']){
+            //修改记录保存最后登陆的时间和ip
+            $data = [
+                'id'=>$userinfo['id'],
+                'last_login_time'=>NOW_TIME,
+                'last_login_ip'=>  get_client_ip(1),
+            ];
+            $this->setField($data);
+            session('ADMIN_INFO',$userinfo);
+            return true;
+        }else{
+            $this->error = '密码不正确';
+            return false;
+        }
     }
 }

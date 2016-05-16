@@ -26,7 +26,7 @@ return array(
     'DB_DEBUG'          => TRUE, // 数据库调试模式 开启后可以记录SQL日志
     'DB_FIELDS_CACHE'   => false, // 启用字段缓存
     'DB_CHARSET'        => 'utf8', // 数据库编码默认采用utf8
-    'SHOW_PAGE_TRACE'   => true,
+//    'SHOW_PAGE_TRACE'   => true,
     'PAGE_SIZE'         => 20,
     'PAGE_THEME'        => '%HEADER% %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%',
     'TMPL_CACHE_ON'     => false, // 是否开启模板编译缓存,设为false则每次都会重新编译

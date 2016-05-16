@@ -166,7 +166,6 @@ class Verify {
                 imagettftext($this->_image, $this->fontSize, mt_rand(-40, 40), $codeNX, $this->fontSize*1.6, $this->_color, $this->fontttf, $code[$i]);
             }
         }
-       
         // 保存验证码
         $key        =   $this->authcode($this->seKey);
         $code       =   $this->authcode(strtoupper(implode('', $code)));

@@ -79,5 +79,28 @@ class AdminController extends \Think\Controller {
         //获取所有的所有权限
         $this->assign('permissions', json_encode(D('Permission')->getList()));
     }
+    
+    public function login() {
+        if(IS_POST){
+            //验证
+            if($this->_model->create('','login')===false){
+                $this->error($this->_model->getError());
+            }
+            if($this->_model->login() === false){
+                $this->error($this->_model->getError());
+            }
+            $this->success('登陆成功',U('Index/index'));
+        }else{
+            $this->display();
+        }
+    }
+    
+    /**
+     * 退出用户
+     */
+    public function logout(){
+        session(null);
+        $this->success('退出成功',U('login'));
+    }
 
 }

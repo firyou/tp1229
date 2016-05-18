@@ -14,5 +14,7 @@ return array(
         'Admin/Index/menu',
         'Admin/Index/main',
         'Admin/Admin/logout',
+        'Admin/Admin/changePwd',
     ],
+    'COOKIE_PREFIX'=>'admin_shop_com_',
 );

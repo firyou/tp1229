@@ -72,7 +72,7 @@ body {
   cursor:pointer;
 }
 #main-div a:visited, #menu-list a:link, #menu-list a:hover {
-  color:#335B64
+  color:#335B64;
   text-decoration:none;
 }
 #menu-list a:active {
@@ -125,7 +125,7 @@ body {
         <ul id="menu-ul">
             <foreach name="menus" item="top_menu">
                 <eq name="top_menu.parent_id" value="0">
-                    <li class="explode" key="02_cat_and_goods" name="menu">
+                    <li class="explode" key="" name="menu">
                     {$top_menu.name}
                         <ul>
                             <foreach name="menus" item="second_menu">
@@ -137,6 +137,12 @@ body {
                     </li>
                 </eq>
             </foreach>
+            <li class="explode" key="" name="menu">
+                个人设置
+                <ul>
+                    <li class="menu-item"><a href="{:U('Admin/changePwd')}" target="main-frame">修改密码</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
     <div id="help-div" style="display:none">

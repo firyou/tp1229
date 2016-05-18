@@ -99,8 +99,36 @@ class AdminController extends \Think\Controller {
      * 退出用户
      */
     public function logout(){
-        session(null);
-        $this->success('退出成功',U('login'));
+        $admin_info = login();
+        $data = [
+            'id'=>$admin_info['id'],
+            'login_token'=>'',
+        ];
+        if($this->_model->setField($data)===false){
+            $this->error($this->_model->getError());
+        }else{
+            session(null);
+            cookie(null);
+            $this->success('退出成功',U('login'));
+        }
+    }
+    
+    public function changePwd() {
+        if(IS_POST){
+            //收集数据
+            if($this->_model->create()===false){
+                $this->error($this->_model->getError());
+            }
+            if($this->_model->changePwd()===false){
+                $this->error($this->_model->getError());
+            }
+            $this->success('修改成功',U('Index/main'));
+        }else{
+            //原始密码
+            //新密码
+            //确认新密码
+            $this->display();
+        }
     }
 
 }

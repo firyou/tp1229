@@ -25,7 +25,10 @@ class AdminModel extends \Think\Model {
 //        ['captcha','check_captcha','验证码不匹配',self::EXISTS_VALIDATE,'callback','login'],
         ['username', 'require', '账号不能为空', self::EXISTS_VALIDATE, '', 'login'],
         ['password', 'require', '密码不能为空', self::EXISTS_VALIDATE, '', 'login'],
+        //修改密码时旧密码和新密码不一致
+        ['password','check_password_on_change','新旧密码不能相同',self::EXISTS_VALIDATE,'callback'],
     ];
+    
     protected $_auto = [
         ['salt', '\Org\Util\String::randString', self::MODEL_BOTH, 'function', 6],
         ['add_time', NOW_TIME, self::MODEL_INSERT],
@@ -41,6 +44,21 @@ class AdminModel extends \Think\Model {
         return $verify->check($code);
     }
 
+    /**
+     * 验证新旧密码是否一致.
+     * @param type $password
+     * @return boolean
+     */
+    protected function check_password_on_change($password) {
+        //收集旧密码
+        $old_pwd = I('post.oldpwd');
+        //比较
+        if($old_pwd==$password){
+            return false;
+        }else{
+            return true;
+        }
+    }
     /**
      * 1.新增管理员得到管理员id
      * 2.保存 [管理员-角色] 关联
@@ -279,8 +297,12 @@ class AdminModel extends \Think\Model {
     public function autoLogin() {
         //自动登陆
         $cookie_token = cookie('admin_token');
+        //如果没有令牌,无需查询数据表
+        if(!$cookie_token){
+            return false;
+        }
         //验证cookie中的令牌和数据表中的是否一致
-        $admin_info   = M('Admin')->where($cookie_token)->find();
+        $admin_info   = $this->where($cookie_token)->find();
         //匹配,存session
         if ($admin_info) {
             //为了安全,重新生成令牌
@@ -314,4 +336,30 @@ class AdminModel extends \Think\Model {
         }
     }
 
+    
+    /**
+     * 修改密码.
+     * @return boolean
+     */
+    public function changePwd() {
+        //判断旧密码是否合法
+        $admin_info = login();
+        $password = salt_mcrypt(I('post.oldpwd'), $admin_info['salt']);
+        if($password == $admin_info['password']){
+            $data = [
+                'id'=>$admin_info['id'],
+                'salt'=>$this->data['salt'],
+                'password'=>  salt_mcrypt($this->data['password'], $this->data['salt']),
+            ];
+            //修改
+            $admin_info = array_merge($admin_info,$data);
+            //将新的用户信息保存到session中
+            login($admin_info);
+            return $this->setField($data);
+        }else{
+            $this->error = '原密码不正确';
+            return false;
+        }
+        
+    }
 }

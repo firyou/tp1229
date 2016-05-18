@@ -236,7 +236,7 @@ class AdminModel extends \Think\Model{
                 'last_login_ip'=>  get_client_ip(1),
             ];
             $this->setField($data);
-            session('ADMIN_INFO',$userinfo);
+            login($userinfo);
             //获取用户的可以访问的path列表
             $this->_save_permission($userinfo['id']);
             return true;
@@ -267,7 +267,7 @@ class AdminModel extends \Think\Model{
                 $pids[] = $permission_info['id'];
             }
         }
-        session('PATHS',$paths);
-        session('PIDS',$pids);
+        permission_pathes($paths);
+        permission_ids($pids);
     }
 }

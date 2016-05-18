@@ -7,7 +7,7 @@ class checkPermissionBehavior extends \Think\Behavior{
         //1.添加忽略列表
         $paths = array_merge([],C('URL_IGNORE'));
         //获取已登录用户的信息
-        $admin_info = session('ADMIN_INFO');
+        $admin_info = login();
         
         //如果已经登陆才需要查询数据表
         if($admin_info){
@@ -17,8 +17,8 @@ class checkPermissionBehavior extends \Think\Behavior{
             $paths = array_merge($paths,C('LOGIN_IGNORE'));
             //获取管理员id
             //获取到用户的可访问的path列表
-            $session_paths = session('PATHS');
-            $paths = array_merge($paths,$session_paths);
+//            $session_paths = permission_pathes();
+            $paths = array_merge($paths,permission_pathes());
         }
         
         //判断当前的页面是否在paths中

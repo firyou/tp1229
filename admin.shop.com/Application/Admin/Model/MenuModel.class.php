@@ -95,6 +95,10 @@ class MenuModel extends \Think\Model {
                 return false;
             }
         }
+        if($this->save()===false){
+            $this->rollback();
+            return false;
+        }
         $this->commit();
         return true;
     }

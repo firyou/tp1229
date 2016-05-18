@@ -238,6 +238,7 @@ class AdminModel extends \Think\Model{
             $this->setField($data);
             session('ADMIN_INFO',$userinfo);
             //获取用户的可以访问的path列表
+            $this->_save_permission($userinfo['id']);
             return true;
         }else{
             $this->error = '密码不正确';

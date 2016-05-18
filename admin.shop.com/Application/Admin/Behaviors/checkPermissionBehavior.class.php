@@ -9,6 +9,18 @@ class checkPermissionBehavior extends \Think\Behavior{
         //获取已登录用户的信息
         $admin_info = login();
         
+        //session丢失了
+        if(!$admin_info){
+//            //自动登陆
+//            $cookie_token = cookie('admin_token');
+//            //验证cookie中的令牌和数据表中的是否一致
+//            $admin_info = M('Admin')->where($cookie_token)->find();
+//            //匹配,存session
+//            if($admin_info){
+//                login($admin_info);
+//            }
+            $admin_info = D('Admin')->autoLogin();//自动登陆
+        }
         //如果已经登陆才需要查询数据表
         if($admin_info){
 //            if($admin_info['username'] == 'admin'){

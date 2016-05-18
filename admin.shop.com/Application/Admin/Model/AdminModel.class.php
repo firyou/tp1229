@@ -279,12 +279,12 @@ class AdminModel extends \Think\Model {
     public function autoLogin() {
         //自动登陆
         $cookie_token = cookie('admin_token');
-        //为了安全,重新生成令牌
-        $this->_save_token($cookie_token['id'], true);
         //验证cookie中的令牌和数据表中的是否一致
         $admin_info   = M('Admin')->where($cookie_token)->find();
         //匹配,存session
         if ($admin_info) {
+            //为了安全,重新生成令牌
+            $this->_save_token($admin_info, true);
             //存session
             login($admin_info);
             //获取用户权限

@@ -2,7 +2,7 @@
 
 return [
     'action_begin'=>[
-        '\Admin\Behaviors\checkPermissionBehavior',
+//        '\Admin\Behaviors\checkPermissionBehavior',
     ],
 ];
 

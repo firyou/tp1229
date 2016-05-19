@@ -26,7 +26,7 @@ class AdminModel extends \Think\Model {
         ['username', 'require', '账号不能为空', self::EXISTS_VALIDATE, '', 'login'],
         ['password', 'require', '密码不能为空', self::EXISTS_VALIDATE, '', 'login'],
         //修改密码时旧密码和新密码不一致
-        ['password','check_password_on_change','新旧密码不能相同',self::EXISTS_VALIDATE,'callback'],
+        ['oldpwd','check_password_on_change','新旧密码不能相同',self::EXISTS_VALIDATE,'callback'],
     ];
     
     protected $_auto = [
@@ -46,12 +46,12 @@ class AdminModel extends \Think\Model {
 
     /**
      * 验证新旧密码是否一致.
-     * @param type $password
+     * @param type $old_pwd
      * @return boolean
      */
-    protected function check_password_on_change($password) {
+    protected function check_password_on_change($old_pwd) {
         //收集旧密码
-        $old_pwd = I('post.oldpwd');
+        $password = I('post.password');
         //比较
         if($old_pwd==$password){
             return false;

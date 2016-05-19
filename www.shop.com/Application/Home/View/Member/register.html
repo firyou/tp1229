@@ -12,31 +12,31 @@
                     <ul>
                         <li>
                             <label for="">用户名：</label>
-                            <input type="text" class="txt" name="username" />
+                            <input type="text" class="txt" name="username" /><span class="reg-error"></span>
                             <p>3-20位字符，可由中文、字母、数字和下划线组成</p>
                         </li>
                         <li>
                             <label for="">密码：</label>
-                            <input type="password" class="txt" name="password" id='password'/>
+                            <input type="password" class="txt" name="password" id='password'/><span class="reg-error"></span>
                             <p>6-20位字符，可使用字母、数字和符号的组合，不建议使用纯数字、纯字母、纯符号</p>
                         </li>
                         <li>
                             <label for="">确认密码：</label>
-                            <input type="password" class="txt" name="repassword" />
+                            <input type="password" class="txt" name="repassword" /><span class="reg-error"></span>
                             <p> <span>请再次输入密码</p>
                         </li>
                         <li>
                             <label for="">邮箱：</label>
-                            <input type="text" class="txt" name="email" />
+                            <input type="text" class="txt" name="email" /><span class="reg-error"></span>
                             <p>邮箱必须合法</p>
                         </li>
                         <li>
                             <label for="">手机号码：</label>
-                            <input type="text" class="txt" value="" name="tel" id="tel" placeholder=""/>
+                            <input type="text" class="txt" value="" name="tel" id="tel" placeholder=""/><span class="reg-error"></span>
                         </li>
                         <li>
                             <label for="">验证码：</label>
-                            <input type="text" class="txt" value="" placeholder="请输入短信验证码" name="tel_code" disabled="disabled" id="captcha"/> <input type="button" onclick="bindPhoneNum(this)" id="get_captcha" value="获取验证码" style="height: 25px;padding:3px 8px"/>
+                            <input type="text" class="txt" value="" placeholder="请输入短信验证码" name="tel_code" disabled="disabled" id="captcha"/> <input type="button" onclick="bindPhoneNum(this)" id="get_captcha" value="获取验证码" style="height: 25px;padding:3px 8px"/><span class="reg-error"></span>
 
                         </li>
                         <li class="checkcode">
@@ -44,11 +44,12 @@
                             <input type="text"  name="img_code" />
                             <img src="{:U('Captcha/captcha',['nocache'=>NOW_TIME])}" alt="" class='img-code'/>
                             <span>看不清？<a href="javascript:;" onclick="change_img_code()">换一张</a></span>
+                            <span class="reg-error"></span>
                         </li>
 
                         <li>
                             <label for="">&nbsp;</label>
-                            <input type="checkbox" class="chb" checked="checked" name='agree'/> 我已阅读并同意《用户注册协议》
+                            <input type="checkbox" class="chb" checked="checked" name='agree'/> 我已阅读并同意《用户注册协议》<span class="reg-error"></span>
                         </li>
                         <li>
                             <label for="">&nbsp;</label>
@@ -69,6 +70,11 @@
         </div>
     </div>
     <!-- 登录主体部分end -->
+</block>
+<block name='css'>
+    <style type="text/css">
+        .reg-error{color: red;padding-left: 10px;}
+    </style>
 </block>
 <block name='js'>
     <script type="text/javascript" src="__JS__/jquery.min.js"></script>
@@ -165,14 +171,21 @@
                     },
                     tel_code:'手机验证码不能为空',
                     img_code:'验证码不能为空',
-                }
+                },
+                errorPlacement:function(error,node){
+                    //找到错误发生的节点,并且找到其后面的reg-error的span把错误信息放进去
+                    var error_node = node[0];
+                    var error_msg_node = $(error_node).parent().find('.reg-error');
+                    var msg = $(error[0]).text();
+                    error_msg_node.text(msg);
+                },
             });
             
             $.validator.addMethod("check_tel",check_telphone,"手机号码不合法");
             
             function check_telphone(tel){
-//                console.debug(arguments);
                 var reg=/^(13|14|15|17|18)\d{9}$/;
+                $('#tel').parent().find('.reg-error').text('');
                 return reg.test(tel);
             }
         });

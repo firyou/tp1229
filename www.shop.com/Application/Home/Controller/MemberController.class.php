@@ -67,16 +67,6 @@ class MemberController extends \Think\Controller {
     }
 
     public function sendSms($telphone) {
-        //引入阿里大鱼的自动加载机制文件
-        vendor('Alidayu.Autoloader');
-        date_default_timezone_set('Asia/Shanghai');
-        $c            = new \TopClient;
-        $c->format='json';
-        $c->appkey    = '23368733';
-        $c->secretKey = '260d2fbb9cb7108421d096e6a6201853';
-        $req          = new \AlibabaAliqinFcSmsNumSendRequest;
-        $req->setSmsType("normal");
-        $req->setSmsFreeSignName("四哥测试");
         $code = (string)mt_rand(1000, 9999);
         //将验证码保存到session中,以便验证
         session('REG_CODE',$code);
@@ -84,15 +74,7 @@ class MemberController extends \Think\Controller {
             'code'=>$code,
             'product'=>'啊咿呀哟',
         ];
-        $req->setSmsParam(json_encode($data));
-        $req->setRecNum($telphone);
-        $req->setSmsTemplateCode("SMS_5590023");
-        $resp         = $c->execute($req);
-        if(isset($resp->result) && isset($resp->result->success)){
-            $status = true;
-        }else{
-            $status = false;
-        }
+        $status = sendSms($telphone, $data);
         $this->ajaxReturn($status);
     }
     

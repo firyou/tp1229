@@ -41,5 +41,9 @@ return array(
 //        'Index:index' => array('{$_SERVER.REQUEST_URI|md5}'),
         'Index:' => array('{:action}_{id}'),
 //        'goods' => array('{:action}_{id}'),
-    )
+    ),
+    
+    'EMAIL_SETTING'=>  require __DIR__.'/email.php',
+    
+    
 );

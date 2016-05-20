@@ -67,6 +67,11 @@ class MemberModel extends \Think\Model{
         }
     }
     
+    /**
+     * 用户注册
+     * TODO:用户注册完成发送邮件到用户提交的邮箱中,必须点击链接才能激活账号.
+     * @return type
+     */
     public function addMember() {
         //将密码加盐加密
         $this->data['password'] = salt_mcrypt($this->data['password'], $this->data['salt']);

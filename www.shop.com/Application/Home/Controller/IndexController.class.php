@@ -7,6 +7,9 @@ use Think\Controller;
 class IndexController extends Controller {
 
     protected function _initialize() {
+        $user_info = login();
+        $this->assign('user_info', $user_info);
+        
         //首页才展示分类列表.
         if (ACTION_NAME == 'index') {
             $is_show_cat = true;
@@ -57,6 +60,8 @@ class IndexController extends Controller {
     }
 
     public function goods($id) {
+        //取出商品详情,然后展示
+        $this->assign('row',D('Goods')->getGoodsInfo($id));
         $this->display();
     }
 

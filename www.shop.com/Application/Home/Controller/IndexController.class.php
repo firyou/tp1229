@@ -34,7 +34,7 @@ class IndexController extends Controller {
         $artilce_list = S('ART_LIST');
         if (!$artilce_list) {
             foreach ($article_categories as $article_cat_id => $article_cat) {
-                $artilce_list[$article_cat_id] = M('Article')->where(['id' => $article_cat_id])->limit(6)->getField('id,id,name');
+                $artilce_list[$article_cat_id] = M('Article')->where(['article_category_id' => $article_cat_id])->limit(6)->getField('id,id,name');
             }
             S('ART_LIST', $artilce_list, 300);
         }

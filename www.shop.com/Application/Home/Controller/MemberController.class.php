@@ -45,7 +45,7 @@ class MemberController extends \Think\Controller {
             //3.提示跳转
             $this->success('注册成功,请登录', U('login'));
         } else {
-            $this->display();
+            $this->display('register_1');
         }
     }
 

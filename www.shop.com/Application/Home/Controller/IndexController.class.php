@@ -46,7 +46,13 @@ class IndexController extends Controller {
     }
 
     public function index() {
-
+        //获取新品 热销 精品列表
+        $data = [
+            'best_list'=>D('Goods')->getGoodsListByStatus(1),
+            'new_list'=>D('Goods')->getGoodsListByStatus(2),
+            'hot_list'=>D('Goods')->getGoodsListByStatus(4),
+        ];
+        $this->assign($data);
         $this->display();
     }
 

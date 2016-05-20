@@ -23,9 +23,9 @@ class checkPermissionBehavior extends \Think\Behavior{
         }
         //如果已经登陆才需要查询数据表
         if($admin_info){
-//            if($admin_info['username'] == 'admin'){
-//                return true;
-//            }
+            if($admin_info['username'] == 'admin'){
+                return true;
+            }
             $paths = array_merge($paths,C('LOGIN_IGNORE'));
             //获取管理员id
             //获取到用户的可访问的path列表

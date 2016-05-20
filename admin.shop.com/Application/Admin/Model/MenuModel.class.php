@@ -153,6 +153,9 @@ class MenuModel extends \Think\Model {
     public function getMenus() {
         //获取当前用户的权限列表
         $pids = permission_ids();
+        if(!$pids){
+            return [];
+        }
         //获取所有的可访问菜单.
         return $this->field('id,name,path,parent_id')->distinct(true)->alias('m')->join('left join __MENU_PERMISSION__ as mp ON m.`id`=mp.`menu_id`')->where(['permission_id' => ['in', $pids]])->select();
     }

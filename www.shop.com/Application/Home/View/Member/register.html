@@ -179,13 +179,16 @@
                     var msg = $(error[0]).text();
                     error_msg_node.text(msg);
                 },
+                //当验证通过的时候需要清空提示内容
+                success:function(error,node){
+                    $(node[0]).parent().find('.reg-error').text('');
+                },
             });
             
             $.validator.addMethod("check_tel",check_telphone,"手机号码不合法");
             
             function check_telphone(tel){
                 var reg=/^(13|14|15|17|18)\d{9}$/;
-                $('#tel').parent().find('.reg-error').text('');
                 return reg.test(tel);
             }
         });

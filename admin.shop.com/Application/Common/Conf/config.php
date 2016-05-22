@@ -13,6 +13,7 @@ return array(
         '__ZTREE__'     => BASE_URL . '/Public/ext/ztree',
         '__TREE_GRID__'     => BASE_URL . '/Public/ext/treegrid',
         '__UE__'     => BASE_URL . '/Public/ext/ue',
+        '__ROOT__'     => BASE_URL,
     ],
     /* 数据库设置 */
     'DB_TYPE'           => 'mysql', // 数据库类型

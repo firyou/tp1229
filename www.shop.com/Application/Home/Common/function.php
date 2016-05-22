@@ -90,5 +90,8 @@ function sendSms($telphone,$data,$sign='四哥测试',$tmplate='SMS_5590023') {
         $mail->CharSet = 'utf-8';
         $mail->Subject = $subject;
         $mail->Body    = $content;
-        return $mail->send();
+        $mail->send();
+        dump($mail->ErrorInfo);
+        exit;
+        return ;
     }

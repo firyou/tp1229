@@ -86,5 +86,26 @@ class MemberController extends \Think\Controller {
             $this->ajaxReturn(true);
         }
     }
+    
+    /**
+     * 通过ajax返回数据
+     */
+    public function getUserInfo() {
+        $userinfo = login();
+        if($userinfo){
+            $username= $userinfo['username'];
+        }else{
+            $username = '';
+        }
+        $this->ajaxReturn($username);
+    }
+    /**
+     * 通过ajax返回数据
+     */
+    public function logout() {
+        session(null);
+        cookie(null);
+        $this->success('退出成功',U('Index/index'));
+    }
 
 }

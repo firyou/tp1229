@@ -32,18 +32,20 @@ return array(
     'SESSION_REDIS_PORT' => '6379', //端口,如果相同只填一个,用英文逗号分隔
     'SESSION_REDIS_AUTH' => '', //Redis auth认证(密钥中不能有逗号),如果相同只填一个,用英文逗号分隔
     'URL_MODEL'          => 2,
-    
     //页面静态化的配置
-    'HTML_CACHE_ON'      => true, // 开启静态缓存
-    'HTML_CACHE_TIME'    => 3600, // 全局静态缓存有效期（秒）
-    'HTML_FILE_SUFFIX'   => '.html', // 设置静态缓存文件后缀
-    'HTML_CACHE_RULES'   => array(// 定义静态缓存规则     // 定义格式1 数组方式     
+    'HTML_CACHE_ON'    => true, // 开启静态缓存
+    'HTML_CACHE_TIME'  => 3600, // 全局静态缓存有效期（秒）
+    'HTML_FILE_SUFFIX' => '.html', // 设置静态缓存文件后缀
+    'HTML_CACHE_RULES' => array(// 定义静态缓存规则     // 定义格式1 数组方式     
 //        'Index:index' => array('{$_SERVER.REQUEST_URI|md5}'),
         'Index:' => array('{:action}_{id}'),
 //        'goods' => array('{:action}_{id}'),
     ),
-    
-    'EMAIL_SETTING'=>  require __DIR__.'/email.php',
-    
-    
+    'EMAIL_SETTING' => require __DIR__ . '/email.php',
+    //数据缓存配置
+    'DATA_CACHE_TYPE'    => 'Redis',
+    'REDIS_HOST'         => '127.0.0.1',
+    'REDIS_PORT'         => 6379,
+    'DATA_CACHE_TIMEOUT' => 3600,
+    'COOKIE_PREFIX'=>'www_shop_com_',
 );

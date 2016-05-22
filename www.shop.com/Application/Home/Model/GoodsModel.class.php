@@ -33,7 +33,7 @@ class GoodsModel extends \Think\Model {
         //获取商品相册
         $row           = $this->field('g.*,gi.content,b.name as bname')->alias('g')->join('__GOODS_INTRO__ AS gi ON gi.goods_id=g.id')->join('__BRAND__ as b on g.brand_id=b.id')->where(['g.id'=>$id])->find();
         $gallery_model = M('GoodsGallery');
-        $row['paths']  = $gallery_model->where(['goods_id' => $id])->getField('id,path', true);
+        $row['paths']  = $gallery_model->where(['goods_id' => $id])->getField('path', true);
         return $row;
     }
 

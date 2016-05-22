@@ -177,7 +177,7 @@
                         <li><span>上架时间：</span>{$row.inputtime|date="Y-m-d H:i:s",###}</li>
                         <li><span>浏览量：</span><label id='goods-click'></label></li>
                     </ul>
-                    <form action="" method="post" class="choose">
+                    <form action="{:U('Cart/addCart')}" method="post" class="choose">
                         <ul>
 
                             <li>
@@ -186,6 +186,7 @@
                                     <dd>
                                         <a href="javascript:;" id="reduce_num"></a>
                                         <input type="text" name="amount" value="1" class="amount"/>
+                                        <input type="hidden" name="id" value="{$row.id}"/>
                                         <a href="javascript:;" id="add_num"></a>
                                     </dd>
                                 </dl>

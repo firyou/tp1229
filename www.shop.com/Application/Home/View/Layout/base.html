@@ -19,7 +19,7 @@
                 </div>
                 <div class="topnav_right fr">
                     <ul>
-                        <li>您好，欢迎来到京西！[<a href="{:U('login')}">登录</a>] [<a href="{:U('register')}">免费注册</a>] </li>
+                        <li id='userinfo'></li>
                         <li class="line">|</li>
                         <li>我的订单</li>
                         <li class="line">|</li>
@@ -36,7 +36,7 @@
         <!-- 页面头部 start -->
         <div class="header w990 bc mt15">
             <div class="logo w990">
-                <h2 class="fl"><a href="index.html"><img src="__IMG__/logo.png" alt="京西商城"></a></h2>
+                <h2 class="fl"><a href="{:U('Index/index')}"><img src="__IMG__/logo.png" alt="京西商城"></a></h2>
             </div>
         </div>
         <!-- 页面头部 end -->
@@ -69,6 +69,28 @@
                 <a href=""><img src="__IMG__/beian.gif" alt="" /></a>
             </p>
         </div>
+        
+        <script type="text/javascript" src="__JS__/jquery.min.js"></script>
+        <script type='text/javascript'>
+            /**
+             * [
+             *  username:'wanglaowu'
+             * ]
+             * 
+             * 您好{$user_info.username}，欢迎来到京西！
+                                    [<a href="{:U('Member/login')}">登录</a>] [<a href="{:U('Member/register')}">免费注册</a>]
+             * @param {type} param1
+             * @param {type} param2
+             */
+            $.getJSON('{:U("Member/getUserInfo")}',function(response){
+                if(response){
+                    var html = '您好'+response+'，欢迎来到京西！[<a href="{:U('Member/logout')}">退出</a>]';
+                }else{
+                    var html = '您好,欢迎来到京西![<a href="{:U('Member/login')}">登录</a>] [<a href="{:U('Member/register')}">免费注册</a>]';
+                }
+                $('#userinfo').html(html);
+            });
+        </script>
         <block name='js'></block>
     </body>
 </html>

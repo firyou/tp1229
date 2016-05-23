@@ -41,6 +41,10 @@ class CartModel extends \Think\Model {
         dump($data);
     }
 
+    /**
+     * 获取当前用户的购物车详细信息.
+     * @return type
+     */
     public function getCartList() {
         $userinfo = login();
         if ($userinfo) {
@@ -144,4 +148,5 @@ class CartModel extends \Think\Model {
         cookie($key,null);
     }
 
+    
 }

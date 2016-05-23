@@ -58,6 +58,8 @@ class CartController extends \Think\Controller{
             cookie('_self_',__SELF__);
             $this->error('请登录',U('Member/login'));
         }else{
+            //读取收货地址
+            $this->assign('address_list', D('Address')->getList());
             $this->display();
         }
     }

@@ -7,13 +7,20 @@
 <block name='js'>
     <script type="text/javascript" src="__JS__/home.js"></script>
     <script type="text/javascript">
+        var url,city_node,area_node,province_name_node,city_name_node,area_name_node;
         $(function(){
             //绑定事件--改编省份的时候获取对应的市级菜单
-            var url = '{:U("getListByParentId")}';
-            var city_node = $('.city_id');
-            var area_node = $('.area_id');
+            url = '{:U("getListByParentId")}';
+            city_node = $('.city_id');
+            area_node = $('.area_id');
+            province_name_node = $('.province_name');//省名隐藏域
+            city_name_node = $('.city_name');//市名隐藏域
+            area_name_node = $('.area_name');//区名隐藏域
             $('.province_id').change(function(){
                 var data={id:$(this).val()};
+                province_name_node.val($(this).find('option:selected').text());//省名
+                city_name_node.val('');
+                area_name_node.val('');
                 //获取到市级菜单
                 $.getJSON(url,data,function(cities){
                     //遍历市级菜单展示在city_id
@@ -30,6 +37,8 @@
             //绑定时间--改市级的时候获取对应的地区菜单
             $('.city_id').change(function(){
                 var data={id:$(this).val()};
+                city_name_node.val($(this).find('option:selected').text());//市级
+                area_name_node.val('');//区县清空
                 //获取到市级菜单
                 $.getJSON(url,data,function(areas){
                     //遍历市级菜单展示在city_id
@@ -41,9 +50,57 @@
                     });
                 });
             });
+            
+            //切换区县
+            $('.area_id').change(function(){
+                area_name_node.val($(this).find('option:selected').text());//区县
+            });
+            
+            
+            
         });
+        
+        //------------------------性感的分割线---------------------------------
+        //回显数据--是否默认
+        <present name="row">
+            $(function(){
+                $('.check').val([{$row.is_default}]);
+
+
+                //回显三级联动地址
+                //1.读取市级菜单列表
+                data = {id:{$row.province_id}};
+                $.getJSON(url,data,function(cities){
+                    //遍历市级菜单展示在city_id
+                    //找到要放市级菜单的节点
+                    city_node[0].length = 1;//市级清空
+                    area_node[0].length = 1;//地区清空
+                    //1.1展示市级菜单列表
+                    $(cities).each(function(i,city){
+                        var html = '<option value="'+city.id+'">'+city.name+'</option>';
+                        $(html).appendTo(city_node)
+                    });
+                    city_node.val([{$row.city_id}]);
+                    
+                    //2.读取区县列表
+                    var data = {id:{$row.city_id}};
+                    $.getJSON(url,data,function(areas){
+                        //遍历市级菜单展示在city_id
+                        //找到要放市级菜单的节点
+                        area_node[0].length = 1;
+                        //2.1展示区县列表
+                        $(areas).each(function(i,area){
+                            var html = '<option value="'+area.id+'">'+area.name+'</option>';
+                            $(html).appendTo(area_node)
+                        });
+                        area_node.val([{$row.area_id}]);
+                    });
+                    
+                });
+            });
+                
+        </present>
     </script>
-    
 </block>
 <block name='content'>
     <!-- 页面主体 start -->
@@ -87,34 +144,38 @@
         <div class="content fl ml10">
             <h3>新增收货地址</h3>
             <div class="address_bd mt10 address_hd">
-                <form action="" name="address_form">
+                <form action="{:U()}" name="address_form" method='post'>
                     <ul>
                         <li>
                             <label for=""><span>*</span>收 货 人：</label>
-                            <input type="text" name="" class="txt" />
+                            <input type="text" name="name" class="txt" value='{$row.name}'/>
                         </li>
                         <li>
                             <label for=""><span>*</span>所在地区：</label>
-                            {:arr2select($provinces,'id','name','province_id')}
+                            {:arr2select($provinces,'id','name','province_id',$row['province_id'])}
+                            <input type="hidden" name='province_name' class='province_name' value='{$row.province_name}'/>
                             
                             {:arr2select([],'id','name','city_id')}
+                            <input type="hidden" name='city_name' class='city_name' value='{$row.city_name}'/>
 
                             {:arr2select([],'id','name','area_id')}
+                            <input type="hidden" name='area_name' class='area_name' value='{$row.area_name}'/>
                         </li>
                         <li>
                             <label for=""><span>*</span>详细地址：</label>
-                            <input type="text" name="" class="txt address"  />
+                            <input type="text" name="detail_address" class="txt address"  value='{$row.detail_address}' />
                         </li>
                         <li>
                             <label for=""><span>*</span>手机号码：</label>
-                            <input type="text" name="" class="txt" />
+                            <input type="text" name="tel" class="txt"  value='{$row.tel}'/>
                         </li>
                         <li>
                             <label for="">&nbsp;</label>
-                            <input type="checkbox" name="" class="check" />设为默认地址
+                            <input type="checkbox" name="is_default" class="check" value='1'/>设为默认地址
                         </li>
                         <li>
                             <label for="">&nbsp;</label>
+                            <input type='hidden' name='id' value='{$row.id}' />
                             <input type="submit" name="" class="btn" value="保存" />
                         </li>
                     </ul>

@@ -17,71 +17,11 @@
             <div class="address">
                 <h3>收货人信息 <a href="javascript:;" id="address_modify">[修改]</a></h3>
                 <div class="address_info">
+                    <foreach name='address_list' item='address'>
                     <p>
-                        <input type="radio" value="1" name="address_id"/>许坤  17002810530  北京市 昌平区 仙人跳区 仙人跳大街 </p>
-                    <input type="radio" value="1" name="address_id"/>许坤  17002810530  四川省 成都市 高新区 仙人跳大街 </p>
-                </div>
-
-                <div class="address_select none">
-                    <ul>
-                        <li class="cur">
-                            <input type="radio" name="address" checked="checked" />王超平 北京市 昌平区 建材城西路金燕龙办公楼一层 13555555555 
-                            <a href="">设为默认地址</a>
-                            <a href="">编辑</a>
-                            <a href="">删除</a>
-                        </li>
-                        <li>
-                            <input type="radio" name="address"  />王超平 湖北省 武汉市  武昌 关山光谷软件园1号201 13333333333
-                            <a href="">设为默认地址</a>
-                            <a href="">编辑</a>
-                            <a href="">删除</a>
-                        </li>
-                        <li><input type="radio" name="address" class="new_address"  />使用新地址</li>
-                    </ul>	
-                    <form action="" class="none" name="address_form">
-                        <ul>
-                            <li>
-                                <label for=""><span>*</span>收 货 人：</label>
-                                <input type="text" name="" class="txt" />
-                            </li>
-                            <li>
-                                <label for=""><span>*</span>所在地区：</label>
-                                <select name="" id="">
-                                    <option value="">请选择</option>
-                                    <option value="">北京</option>
-                                    <option value="">上海</option>
-                                    <option value="">天津</option>
-                                    <option value="">重庆</option>
-                                    <option value="">武汉</option>
-                                </select>
-
-                                <select name="" id="">
-                                    <option value="">请选择</option>
-                                    <option value="">朝阳区</option>
-                                    <option value="">东城区</option>
-                                    <option value="">西城区</option>
-                                    <option value="">海淀区</option>
-                                    <option value="">昌平区</option>
-                                </select>
-
-                                <select name="" id="">
-                                    <option value="">请选择</option>
-                                    <option value="">西二旗</option>
-                                    <option value="">西三旗</option>
-                                    <option value="">三环以内</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label for=""><span>*</span>详细地址：</label>
-                                <input type="text" name="" class="txt address"  />
-                            </li>
-                            <li>
-                                <label for=""><span>*</span>手机号码：</label>
-                                <input type="text" name="" class="txt" />
-                            </li>
-                        </ul>
-                    </form>
-                    <a href="" class="confirm_btn"><span>保存收货人信息</span></a>
+                        <input type="radio" value="{$address.id}" name="address_id" <eq name='address.is_default' value='1'> checked="checked"</eq>/>{$address.name}  {$address.tel}  {$address.province_name} {$address.city_name} {$address.area_name} {$address.detail_address}
+                    </p>
+                    </foreach>
                 </div>
             </div>
             <!-- 收货人信息  end-->

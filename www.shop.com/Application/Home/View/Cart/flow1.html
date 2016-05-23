@@ -19,7 +19,7 @@
             <tbody>
             <foreach name='goods_list' item='goods'>
                 <tr>
-                    <td class="col1"><a href=""><img src="{$goods.logo}" alt="" width='80' /></a>  <strong><a href="">{$goods.name}</a></strong></td>
+                    <td class="col1"><a href="{:U('Index/goods',['id'=>$goods['id']])}"><img src="{$goods.logo}" alt="" width='80' /></a>  <strong><a href="{:U('Index/goods',['id'=>$goods['id']])}">{$goods.name}</a></strong></td>
                     <td class="col3">￥<span>{$goods.shop_price}</span></td>
                     <td class="col4"> 
                         <a href="javascript:;" class="reduce_num"></a>
@@ -38,8 +38,8 @@
             </tfoot>
         </table>
         <div class="cart_btn w990 bc mt10">
-            <a href="" class="continue">继续购物</a>
-            <a href="" class="checkout">结 算</a>
+            <a href="{:U('Index/index')}" class="continue">继续购物</a>
+            <a href="{:U('flow2')}" class="checkout">结 算</a>
         </div>
     </div>
     <!-- 主体部分 end -->

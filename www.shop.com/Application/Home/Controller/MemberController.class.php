@@ -60,7 +60,9 @@ class MemberController extends \Think\Controller {
                 $this->error($this->_model->getError());
             }
             //3.提示跳转
-            $this->success('登录成功', U('Index/index'));
+            $url = cookie('_self_')?cookie('_self_'):U('Index/index');//看是否从购物车过来的,如果是跳转回购物车
+            cookie('_self_',null);//购物车地址使用过就可以销毁了
+            $this->success('登录成功', $url);
         } else {
             $this->display();
         }

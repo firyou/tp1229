@@ -99,6 +99,10 @@ class MemberModel extends \Think\Model{
         
         //保存session信息
         login($user_info);
+        
+        //登陆成功将cookie中的购物车数据保存到数据库中
+        D('Cart')->cookie2Db();
+        
         //TODO::自动登陆
         return true;
     }

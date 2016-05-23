@@ -49,4 +49,16 @@ class CartController extends \Think\Controller{
         $this->assign($this->_model->getCartList());
         $this->display();
     }
+    
+    /**
+     * 填写收货信息.
+     */
+    public function flow2() {
+        if(!login()){
+            cookie('_self_',__SELF__);
+            $this->error('请登录',U('Member/login'));
+        }else{
+            $this->display();
+        }
+    }
 }

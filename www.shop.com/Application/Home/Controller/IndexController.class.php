@@ -59,9 +59,14 @@ class IndexController extends Controller {
         $this->display();
     }
 
+    /**
+     * 查看商品详情.
+     * @param type $id
+     */
     public function goods($id) {
         //取出商品详情,然后展示
         $this->assign('row',D('Goods')->getGoodsInfo($id));
+        //获取会员价格
         $this->display();
     }
 

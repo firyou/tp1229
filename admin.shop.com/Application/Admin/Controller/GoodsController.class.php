@@ -122,6 +122,8 @@ class GoodsController extends \Think\Controller {
         $this->assign('brands', D('Brand')->getList());
         //加载商品供货商列表
         $this->assign('suppliers', D('Supplier')->getList());
+        //获取所有的可用会员级别
+        $this->assign('member_levels',M('MemberLevel')->where(['status'=>1])->select());
     }
 
 }

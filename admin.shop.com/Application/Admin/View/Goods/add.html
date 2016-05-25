@@ -165,6 +165,17 @@
                             </div>
                         </td>
                     </tr>
+                    
+                    <hr />
+                    <tr>
+                        <td class="label">会员价：</td>
+                        <td>
+                            <foreach name='member_levels' item='member_level'>
+                                {$member_level.name}<input type='text' name='member_price[{$member_level.id}]' value=''/><br />
+                            </foreach>
+                        </td>
+                    </tr>
+                    
                 </table>
 
 

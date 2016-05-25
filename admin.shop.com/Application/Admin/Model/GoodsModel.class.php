@@ -220,6 +220,29 @@ class GoodsModel extends \Think\Model {
             $this->rollback();
             return false;
         }
+        
+        //4.保存会员价格
+        $member_prices = I('post.member_price');
+        //4.1删除原有会员价格
+        $member_price_model = M('MemberGoodsPrice');
+        $member_price_model->where(['goods_id'=>$request_data['id']])->delete();
+        $data = [];
+        foreach($member_prices as $level=>$price){
+            if(empty($price)){
+                continue;
+            }
+            $data[] = [
+                'goods_id'=>$request_data['id'],
+                'member_level_id'=>$level,
+                'price'=>$price,
+            ];
+        }
+        //4.2保存商品的会员价格
+        if($data){
+            $member_price_model->addAll($data);
+        }
+        
+        
         $this->commit();
         return true;
     }

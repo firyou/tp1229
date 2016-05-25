@@ -174,6 +174,12 @@
                         <li><span>商品编号： </span>{$row.sn}</li>
                         <li class="market_price"><span>定价：</span><em>￥{$row.market_price}</em></li>
                         <li class="shop_price"><span>本店价：</span> <strong>￥{$row.shop_price}</strong> <a href="">(降价通知)</a></li>
+                        <li>
+                            <span>会员价：</span>
+                            <foreach name='row.member_price_list' item='member_price'>
+                                {$member_price.name}:¥{$member_price.price}&nbsp;&nbsp;
+                            </foreach>
+                        </li>
                         <li><span>上架时间：</span>{$row.inputtime|date="Y-m-d H:i:s",###}</li>
                         <li><span>浏览量：</span><label id='goods-click'></label></li>
                     </ul>

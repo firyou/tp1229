@@ -60,6 +60,13 @@ class CartController extends \Think\Controller{
         }else{
             //读取收货地址
             $this->assign('address_list', D('Address')->getList());
+            //获取送货方式
+            $pmconfig_model = new \Home\Model\PmConfigModel();
+            $this->assign('deliveries', $pmconfig_model->getDeliveryList());
+            //获取支付方式
+            $this->assign('payments', $pmconfig_model->getPaymentList());
+            //获取购物车列表
+            $this->assign($this->_model->getCartList());
             $this->display();
         }
     }

@@ -30,4 +30,21 @@ class PmConfigModel{
     public function getPaymentList() {
         return M('Payment')->where(['status'=>1])->select();
     }
+    
+    /**
+     * 获取配送方式的详细信息.
+     * @param integer $id
+     * @return type
+     */
+    public function getDeliveryInfo($id) {
+        return M('Delivery')->where(['id'=>$id])->find();
+    }
+    /**
+     * 获取配送方式的详细信息.
+     * @param integer $id
+     * @return type
+     */
+    public function getPaymentInfo($id) {
+        return M('Payment')->where(['id'=>$id])->find();
+    }
 }

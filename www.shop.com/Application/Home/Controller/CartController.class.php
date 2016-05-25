@@ -54,20 +54,21 @@ class CartController extends \Think\Controller{
      * 填写收货信息.
      */
     public function flow2() {
+        //此页面必须登录
         if(!login()){
             cookie('_self_',__SELF__);
             $this->error('请登录',U('Member/login'));
-        }else{
-            //读取收货地址
-            $this->assign('address_list', D('Address')->getList());
-            //获取送货方式
-            $pmconfig_model = new \Home\Model\PmConfigModel();
-            $this->assign('deliveries', $pmconfig_model->getDeliveryList());
-            //获取支付方式
-            $this->assign('payments', $pmconfig_model->getPaymentList());
-            //获取购物车列表
-            $this->assign($this->_model->getCartList());
-            $this->display();
         }
+        
+        //读取收货地址
+        $this->assign('address_list', D('Address')->getList());
+        //获取送货方式
+        $pmconfig_model = new \Home\Model\PmConfigModel();
+        $this->assign('deliveries', $pmconfig_model->getDeliveryList());
+        //获取支付方式
+        $this->assign('payments', $pmconfig_model->getPaymentList());
+        //获取购物车列表
+        $this->assign($this->_model->getCartList());
+        $this->display();
     }
 }

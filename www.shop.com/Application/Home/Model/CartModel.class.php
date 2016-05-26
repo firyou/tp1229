@@ -55,16 +55,48 @@ class CartModel extends \Think\Model {
         }
         $total_price = 0;
         $goods_list  = [];
+        
+        //购物车有数据
         if ($cart_list) {
             //商品id列表
             $goods_ids       = array_keys($cart_list);
             //查询出商品信息
             $goods_info_list = M('Goods')->where(['id' => ['in', $goods_ids]])->select();
+            
+            //准备会员价
+            //1.获取用户积分
+            if($userinfo){
+                $socre = M('Member')->getFieldById($userinfo['id'],'score');
+            }else{
+                $socre = 0;
+            }
+            //2.获取用户级别
+            //bottom    score   top
+            $cond = [
+                'bottom'=>[
+                    'elt',$socre,
+                ],
+                'top'=>[
+                    'egt',$socre,
+                ],
+            ];
+            $level_info = M('MemberLevel')->field('id,discount')->where($cond)->find();
+            
+            
             //组织数据,保存小计金额\总计金额\每个商品的购买数量
+            //还要准备商品的会员价格
             foreach ($goods_info_list as $goods) {
-                $goods['shop_price'] = money_format($goods['shop_price']);
+                //3.判断是否有专门价格,有以专门价格为准,否则以折扣率计算
+                $member_price = M('MemberGoodsPrice')->where(['goods_id'=>$goods['id'],'member_level_id'=>$level_info['id']])->getField('price');
+                //3.2如果没有专门配置使用折扣率计算
+                if(!$member_price){
+                    $member_price = $level_info['discount'] / 100 * $goods['shop_price'];
+                }
+                
+                //使用会员价格进行计算
+                $goods['shop_price'] = money_format($member_price);
                 $goods['amount']     = $cart_list[$goods['id']]; //数量
-                $goods['sub_total']  = money_format($goods['shop_price'] * $cart_list[$goods['id']]); //小计
+                $goods['sub_total']  = money_format($member_price * $cart_list[$goods['id']]); //小计
                 $total_price += $goods['sub_total']; //总计
                 $goods_list[]        = $goods; //保存到所有的商品信息数组中
             }

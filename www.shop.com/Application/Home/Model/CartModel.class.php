@@ -180,5 +180,12 @@ class CartModel extends \Think\Model {
         cookie($key,null);
     }
 
-    
+    /**
+     * 清空购物车
+     * @return type
+     */
+    public function clear() {
+        $userinfo = login();
+        return $this->where(['member_id'=>$userinfo['id']])->delete();
+    }
 }

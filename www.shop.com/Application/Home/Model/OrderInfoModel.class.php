@@ -14,6 +14,19 @@ namespace Home\Model;
  * @author qingf
  */
 class OrderInfoModel extends \Think\Model{
+    
+    /**
+     * 订单状态标识.
+     * @var type 
+     */
+    public $statuses = [
+        0=>'已关闭',
+        1=>'待支付',
+        2=>'待发货',
+        3=>'待收货',
+        4=>'已完成',
+    ];
+    
     public function addOrder() {
         $this->startTrans();
         $user_info = login();//获取用户信息
@@ -27,6 +40,7 @@ class OrderInfoModel extends \Think\Model{
         $this->data['detail_address'] = $address_info['detail_address'];
         $this->data['tel'] = $address_info['tel'];
         $this->data['member_id'] = $address_info['member_id'];
+        $this->data['inputtime'] = NOW_TIME;
         
         //获取配送方式
         $pmconfig_model = new PmConfigModel();
@@ -116,8 +130,42 @@ class OrderInfoModel extends \Think\Model{
             $this->rollback();
             return false;
         }
+        
+        
+        
+        //扣库存
+        $goods_model = M('Goods');
+        foreach($cart_list['goods_list'] as $goods){
+            //获取当前商品的库存
+            $stock = $goods_model->where(['id'=>$goods['id'],'stock'=>['egt',$goods['amount']]])->count();
+            if(!$stock){
+                $this->error = '库存不足';
+                $this->rollback();
+                return false;
+            }
+            $cond = ['id'=>$goods['id']];
+            $goods_model->where($cond)->setDec('stock',$goods['amount']);
+        }
+
+        //销毁购物车
+        D('Cart')->clear();
+        
         $this->commit();
         return true;
+    }
+    
+    
+    
+    public function getOrderList() {
+        $user_info = login();//获取用户信息
+        //查询出当前用户的订单列表
+        $rows = $this->where(['member_id'=>$user_info['id']])->order('id desc')->select();
+        $order_detail_model = M('OrderInfoItem');
+        foreach($rows as $key=>$row){
+            //取出每个订单的商品列表
+            $rows[$key]['goods_list'] = $order_detail_model->field('goods_id,goods_name,logo')->where(['order_info_id'=>$row['id']])->select();
+        }
+        return $rows;
     }
 }
 
@@ -132,3 +180,4 @@ class OrderInfoModel extends \Think\Model{
  * 总计:578.00
  * 
  */
+
